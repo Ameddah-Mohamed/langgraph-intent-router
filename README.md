@@ -66,7 +66,7 @@ GOOGLE_API_KEY=your_google_api_key_here
 
 ---
 
-## 🚀 Usage
+## Usage
 ```bash
 python main.py
 ```
@@ -86,7 +86,7 @@ Type `exit` to quit the session.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Library | Purpose |
 |---|---|
@@ -98,6 +98,6 @@ Type `exit` to quit the session.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the terms of the [LICENSE](LICENSE) file.
