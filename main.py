@@ -67,3 +67,25 @@ def therapist_agent(state: State):
         "messages": [AIMessage(reply.content)],
         "agent_name": "Therapist"
     }
+
+
+def logical_agent(state: State):
+    last_message = state["messages"][-1].content
+
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a logical assistant."
+        },
+        {
+            "role": "user",
+            "content": last_message
+        }
+    ]
+
+    reply = llm.invoke(messages)
+
+    return {
+        "messages": [AIMessage(reply.content)],
+        "agent_name": "Logical"
+    }
