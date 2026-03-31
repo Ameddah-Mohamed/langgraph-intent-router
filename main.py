@@ -38,3 +38,8 @@ def classifier_agent(state: State):
     ])
 
     return {"intent": result.message_type}
+
+def router_agent(state: State):
+    if state["intent"] == "emotional":
+        return {"next": "therapist"}
+    return {"next": "logical"}
