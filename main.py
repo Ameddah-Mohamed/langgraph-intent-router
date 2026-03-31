@@ -7,6 +7,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.messages import HumanMessage, AIMessage, SystemMessage
 from langgraph.graph.message import add_messages
 from langchain.messages import SystemMessage
+from langgraph.graph import START, END, StateGraph
 
 load_dotenv()
 
@@ -89,3 +90,28 @@ def logical_agent(state: State):
         "messages": [AIMessage(reply.content)],
         "agent_name": "Logical"
     }
+
+
+graph_builder = StateGraph(State)
+
+graph_builder.add_node("classifier_agent", classifier_agent)
+graph_builder.add_node("router_agent", router_agent)
+graph_builder.add_node("therapist_agent", therapist_agent)
+graph_builder.add_node("logical_agent", logical_agent)
+
+graph_builder.add_edge(START, "classifier_agent")
+graph_builder.add_edge("classifier_agent", "router_agent")
+
+graph_builder.add_conditional_edges(
+    "router_agent",
+    lambda state: state.get("next"),
+    {
+        "therapist": "therapist_agent",
+        "logical": "logical_agent"
+    }
+)
+
+graph_builder.add_edge("therapist_agent", END)
+graph_builder.add_edge("logical_agent", END)
+
+graph = graph_builder.compile()
