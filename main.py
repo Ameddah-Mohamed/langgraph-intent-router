@@ -115,3 +115,27 @@ graph_builder.add_edge("therapist_agent", END)
 graph_builder.add_edge("logical_agent", END)
 
 graph = graph_builder.compile()
+
+
+
+def run():
+    state = {
+        "messages": [],
+        "intent": None,
+        "next": None,
+        "agent_name": None
+    }
+
+    while True:
+        user_input = input("Message: ")
+
+        if user_input == "exit":
+            break
+
+        state["messages"] = state["messages"] + [HumanMessage(user_input)]
+        state = graph.invoke(state)
+
+        print(f"Assistant ({state['agent_name']}): {state['messages'][-1].content}")
+
+if __name__ == "__main__":
+    run()
