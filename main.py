@@ -4,7 +4,7 @@ from typing import TypedDict, Annotated, Literal
 from pydantic import BaseModel, Field
 
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.messages import HumanMessage
+from langchain.messages import HumanMessage, AIMessage, SystemMessage
 from langgraph.graph.message import add_messages
 from langchain.messages import SystemMessage
 
@@ -43,3 +43,27 @@ def router_agent(state: State):
     if state["intent"] == "emotional":
         return {"next": "therapist"}
     return {"next": "logical"}
+
+
+
+
+def therapist_agent(state: State):
+    last_message = state["messages"][-1].content
+
+    messages = [
+        {
+            "role": "system",
+            "content": "You are a compassionate therapist."
+        },
+        {
+            "role": "user",
+            "content": last_message
+        }
+    ]
+
+    reply = llm.invoke(messages)
+
+    return {
+        "messages": [AIMessage(reply.content)],
+        "agent_name": "Therapist"
+    }
